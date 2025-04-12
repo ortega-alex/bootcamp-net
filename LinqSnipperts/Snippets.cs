@@ -184,9 +184,9 @@
                                  join element in firstList // todos los elementos de la segunda lista
                                 on secondElement equals element // los que son iguales
                                 into tempList // guardamos los elementos que son iguales en una lista temporal
-                                from tempElement in tempList.DefaultIfEmpty() // si no hay elementos iguales, los dejamos vacios
-                                where secondElement != tempElement // excluimos los elementos que son iguales
-                                select new { Element = secondElement }; // seleccionamos los elementos de la primer lista
+                                 from tempElement in tempList.DefaultIfEmpty() // si no hay elementos iguales, los dejamos vacios
+                                 where secondElement != tempElement // excluimos los elementos que son iguales
+                                 select new { Element = secondElement }; // seleccionamos los elementos de la primer lista
 
             // union
             var unionList = leftOuterJoin.Union(rightOuterJoin);
@@ -195,7 +195,7 @@
         }
 
         static public void SkipTakeLinq()
-        {           
+        {
             var myList = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
             // skip => omitir
@@ -249,10 +249,135 @@
             var range = Enumerable.Range(1, 10); // { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
         }
 
-        // All
-        // Aggregate
-        // Disctinct
-        // GroupBy
 
+        static public void StudenLinq()
+        {
+            var classRoom = new[]
+            {
+                new Student { Id = 1, Name = "Student 1", Grade = 100, Certified = true },
+                new Student { Id = 2, Name = "Student 2", Grade = 80, Certified = false },
+                new Student { Id = 3, Name = "Student 3", Grade = 90, Certified = true },
+                new Student { Id = 4, Name = "Student 4", Grade = 70, Certified = false },
+                new Student { Id = 5, Name = "Student 5", Grade = 60, Certified = true }
+            };
+
+            // 1. all students are certified
+            var allStudentsAreCertified = from student in classRoom
+                                          where student.Certified
+                                          select student;
+
+            // 2 . all students not certified
+            var allStudentsNotCertified = from student in classRoom
+                                          where !student.Certified
+                                          // where student.Certified == false // same
+                                          select student;
+
+            // 3. all students with grade > 60
+            var aooivedStudents = from student in classRoom
+                                  where student.Grade > 60 && student.Certified == true
+                                  select student.Name; // permite seleccionar solo el nombre por ejemplo : { Student 1, Student 3, Student 5 }
+        }
+
+        // All
+        static public void AllLing()
+        {
+            var numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            // 1. all are smaller than 10
+            bool allAreSmallerThan10 = numbers.All(num => num < 10); // true
+            // 2. all are bigger or equal than 2
+            bool allAreBiggerOrEqualThan2 = numbers.All(num => num >= 2); // false
+
+            var emptyList = new List<int>();
+            bool allNumbersAreGreaaterThan0 = emptyList.All(num => num > 0); // true, porque no hay elementos en la lista
+
+            // Diferencia entre All y Any -> All todos los valores deben cumplir la condicion, Any al menos uno
+        }
+
+        // Aggregate
+        static public void AggregateQueries()
+        {
+            // funciona como una secuencia de operaciones una tras otra que son acumulativas
+            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            // Sum all numbers
+            int sum = numbers.Aggregate(0, (acc, num) => acc + num); // 55
+
+            string[] words = { "Hello", "World", "!" };
+            string greetion = words.Aggregate("", (acc, word) => acc + word); // HelloWorld!
+        }
+
+        // Disctinct
+        static public void DistinctValues()
+        {
+            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5 };
+            // disticts numbers
+            int[] distinctNumbers = numbers.Distinct().ToArray(); // { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
+            IEnumerable<int> distinctNumbers2 = numbers.Distinct(); // { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }
+        }
+
+        // GroupBy
+        static public void GroupByExample()
+        {
+           List<int> numbers = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9};
+            // obtain only even numbers and generate two groups
+            var grouped = numbers.GroupBy(num => num % 2 == 0); // { { false, { 1, 3, 5, 7, 9 } }, { true, { 2, 4, 6, 8 } } }
+
+            // we will have two groups
+            // 1. the group that doesnt fit the condition
+            // 2. the group that fits the condition
+            foreach (var group in grouped)
+            {
+                Console.WriteLine($"Group: {group.Key}");
+                foreach (var number in group)
+                    Console.WriteLine(number);
+            }
+
+            // Another example
+            var classRoom = new[]
+            {
+                new Student { Id = 1, Name = "Student 1", Grade = 100, Certified = true },
+                new Student { Id = 2, Name = "Student 2", Grade = 80, Certified = false },
+                new Student { Id = 3, Name = "Student 3", Grade = 90, Certified = true },
+                new Student { Id = 4, Name = "Student 4", Grade = 70, Certified = false },
+                new Student { Id = 5, Name = "Student 5", Grade = 60, Certified = true }
+            };
+            var certifiedQuery = classRoom.GroupBy(student => student.Certified && student.Grade >= 60); // { { false, { Student 2, Student 4 } }, { true, { Student 1, Student 3, Student 5 } } }
+
+            // we obtain two groups
+            // 1. Not cerified students
+            // 2. Certified students
+
+            foreach (var group in certifiedQuery)
+            {
+                Console.WriteLine($"Group: {group.Key}");
+                foreach (var student in group)
+                    Console.WriteLine(student.Name);
+            }
+        }
+
+        // Relationships
+        static public void relationsLinq()
+        {
+            List<Post> posts = new List<Post>
+            {
+                new Post { Id = 1, Title = "Post 1", Content = "My frist Post", CreatedAt = DateTime.Now,  
+                    Comments = new List<Comment> { 
+                        new Comment { Id = 1, Content = "Comment 1", Title = "Coment 1", CreatedAt = DateTime.Now }, 
+                        new Comment { Id = 2, Content = "Comment 2",  Title = "Coment 2", CreatedAt = DateTime.Now } 
+                    } },
+                new Post { Id = 2, Title = "Post 2", Content = "My secods Post", CreatedAt = DateTime.Now, 
+                    Comments = new List<Comment> { 
+                        new Comment { Id = 3, Content = "Comment 3", Title = "Coment 3", CreatedAt = DateTime.Now }, 
+                        new Comment { Id = 4, Content = "Comment 4", Title = "Coment 4", CreatedAt = DateTime.Now } 
+                    } },
+                new Post { Id = 3, Title = "Post 3", Content = "My thid Post", CreatedAt = DateTime.Now,
+                    Comments = new List<Comment> { 
+                        new Comment { Id = 5, Content = "Comment 5",  Title = "Coment 5", CreatedAt = DateTime.Now }, 
+                        new Comment { Id = 6, Content = "Comment 6",  Title = "Coment 6", CreatedAt = DateTime.Now }
+                    } }
+            };
+
+            var commentsWhitContent = posts.SelectMany(
+                post => post.Comments, (post, comment) => new { PostId = post.Id, CommentContent = comment.Content }); // retorna una lista con el postId y el contenido del comentario
+        }
     }
 }

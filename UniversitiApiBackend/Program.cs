@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using UniversitiApiBackend.DataAccess;
+using UniversitiApiBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +16,23 @@ builder.Services.AddDbContext<UniversityDBContext>(options => options.UseSqlServ
 // Add services to the container.
 
 builder.Services.AddControllers();
+// 4. Add Custom services (folder services)
+builder.Services.AddScoped<IStudentsService, StudentsService>(); // permite injectar a los controladores, IStudentsService es la interface y StudentsService es la implementacion
+// Todo: add the rest of services
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// 5. cors configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin(); // allow any origin
+        builder.AllowAnyMethod(); // allow any method [GET, POST, PUT, PATCH, ETC]
+        builder.AllowAnyHeader(); // allow any header
+    });
+});
 
 var app = builder.Build();
 
@@ -32,5 +48,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// 6. Tell app to use cors
+app.UseCors("CorsPolicy");
 
 app.Run();
