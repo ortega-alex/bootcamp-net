@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversitiApiBackend", "UniversitiApiBackend\UniversitiApiBackend.csproj", "{F80EE2D4-3013-44D1-89F2-5E4127C32D83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqSnipperts", "LinqSnipperts\LinqSnipperts.csproj", "{3210EC66-4D58-4F5C-BC90-183D4938CB4E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F80EE2D4-3013-44D1-89F2-5E4127C32D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F80EE2D4-3013-44D1-89F2-5E4127C32D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F80EE2D4-3013-44D1-89F2-5E4127C32D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F80EE2D4-3013-44D1-89F2-5E4127C32D83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3210EC66-4D58-4F5C-BC90-183D4938CB4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3210EC66-4D58-4F5C-BC90-183D4938CB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3210EC66-4D58-4F5C-BC90-183D4938CB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3210EC66-4D58-4F5C-BC90-183D4938CB4E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {853097E8-F961-4034-889A-C9878876B6AB}
+	EndGlobalSection
+EndGlobal
