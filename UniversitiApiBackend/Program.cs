@@ -13,12 +13,17 @@ var connectionString = builder.Configuration.GetConnectionString(CONNECTIONNAME)
 // 3. establecer contexto
 builder.Services.AddDbContext<UniversityDBContext>(options => options.UseSqlServer(connectionString));
 
+// 7. add service jwt autorization
+// builder.Services.AddJwtTokenServices(builder.Configuration);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
 // 4. Add Custom services (folder services)
 builder.Services.AddScoped<IStudentsService, StudentsService>(); // permite injectar a los controladores, IStudentsService es la interface y StudentsService es la implementacion
 // Todo: add the rest of services
+
+// 8. TODO: config swagget to take care of autorization of jwt (open api)
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
