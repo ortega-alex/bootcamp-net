@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversitiApiBackend.DataAccess;
 using UniversitiApiBackend.Helpers;
 using UniversitiApiBackend.Models.DataModels;
 
@@ -10,11 +11,13 @@ namespace UniversitiApiBackend.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        private readonly UniversityDBContext _context;
         private readonly JwtSettings _jwtSettings;
 
-        public AccountController(JwtSettings jwtSettings)
+        public AccountController(JwtSettings jwtSettings, UniversityDBContext context)
         {
            _jwtSettings = jwtSettings;
+            _context = context;
         }
 
         private IEnumerable<User> Logins = new List<User>()
@@ -36,7 +39,7 @@ namespace UniversitiApiBackend.Controllers
         };
 
         [HttpPost]
-        public IActionResult GetToken(UserLogins userLogins)
+        public async Task<IActionResult> GetToken(UserLogins userLogins)
         {
             try
             {
@@ -50,7 +53,7 @@ namespace UniversitiApiBackend.Controllers
                         UserName = user.Name,
                         EmailId = user.Email,
                         Id = user.Id,
-                        GuidId = Guid.NewGuid(),
+                        GuidId = Guid.NewGuid()
                     }, _jwtSettings);
                     return Ok(Token);
 
@@ -65,7 +68,7 @@ namespace UniversitiApiBackend.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")] // RBAC => Role Based Access Control
         public IActionResult GetUserList()
         {
             return Ok(Logins);

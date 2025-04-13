@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
+using UniversitiApiBackend;
 using UniversitiApiBackend.DataAccess;
 using UniversitiApiBackend.Services;
 
@@ -14,7 +17,7 @@ var connectionString = builder.Configuration.GetConnectionString(CONNECTIONNAME)
 builder.Services.AddDbContext<UniversityDBContext>(options => options.UseSqlServer(connectionString));
 
 // 7. add service jwt autorization
-// builder.Services.AddJwtTokenServices(builder.Configuration);
+builder.Services.AddJwtTokenServices(builder.Configuration);
 
 // Add services to the container.
 
@@ -23,10 +26,44 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IStudentsService, StudentsService>(); // permite injectar a los controladores, IStudentsService es la interface y StudentsService es la implementacion
 // Todo: add the rest of services
 
-// 8. TODO: config swagget to take care of autorization of jwt (open api)
+// 8. add authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("UserOnlyPolicy", policy => policy.RequireClaim("UserOnly", "User1"));
+});
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// 9. TODO: config swagget to take care of autorization of jwt (open api)
+builder.Services.AddSwaggerGen(options =>
+{
+    // we define the security for authorization
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+             new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }   
+    });
+});
 
 // 5. cors configuration
 builder.Services.AddCors(options =>
@@ -46,6 +83,11 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+    app.UseSwagger();
+    app.UseSwaggerUI( // url = /swagger
+        options => options.SwaggerEndpoint("/openapi/v1.json", "Universiti v1")
+        //options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Universiti v1")
+    );
 }
 
 app.UseHttpsRedirection();
