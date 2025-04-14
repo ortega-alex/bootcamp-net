@@ -44,19 +44,25 @@ namespace UniversitiApiBackend.Controllers
             try
             {
                 var Token = new UserTokents();
-                var Valid = Logins.Any(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
-                if (Valid)
+                // Search a user in context with LINQ
+                var searchUser = (from user in _context.Users
+                                 where user.Name == userLogins.UserName && user.Password == userLogins.Password
+                                 select user).FirstOrDefault();
+
+                // TODO: Change to searchUser
+                // var Valid = Logins.Any(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
+
+                if (searchUser != null)
                 {
-                    var user = Logins.FirstOrDefault(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
+                    // var user = Logins.FirstOrDefault(user => user.Name.Equals(userLogins.UserName, StringComparison.OrdinalIgnoreCase));
                     Token = JwtHelpers.GenTokenKey(new UserTokents()
                     {
-                        UserName = user.Name,
-                        EmailId = user.Email,
-                        Id = user.Id,
+                        UserName = searchUser.Name,
+                        EmailId = searchUser.Email,
+                        Id = searchUser.Id,
                         GuidId = Guid.NewGuid()
                     }, _jwtSettings);
                     return Ok(Token);
-
                 }
                 else
                     return BadRequest("Invalid UserName or Password");
