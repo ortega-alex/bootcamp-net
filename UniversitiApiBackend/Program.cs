@@ -1,12 +1,22 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using UniversitiApiBackend;
 using UniversitiApiBackend.DataAccess;
 using UniversitiApiBackend.Services;
+// 10. use serilog to log events
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// 11. config serilog
+builder.Host.UseSerilog((hostBuilderCtx, loggerConf) =>
+{
+    loggerConf
+        .WriteTo.Console()
+        .WriteTo.Debug()
+        .ReadFrom.Configuration(hostBuilderCtx.Configuration);
+});
 
 // TODO: connction with database
 // 1. nombre de la conexion
@@ -89,6 +99,9 @@ if (app.Environment.IsDevelopment())
         //options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Universiti v1")
     );
 }
+
+// 12.  Tell app to use serilog
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
