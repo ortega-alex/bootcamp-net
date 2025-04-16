@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternationalApi", "Interna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiVersionControl", "ApiVersionControl\ApiVersionControl.csproj", "{8499DE27-46AE-4A46-9DB2-D9FD6EF854AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EjemploFlujoAsync", "EjemploFlujoAsync\EjemploFlujoAsync.csproj", "{FF9445B9-D957-405A-A8CD-1CDF28F58671}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{8499DE27-46AE-4A46-9DB2-D9FD6EF854AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8499DE27-46AE-4A46-9DB2-D9FD6EF854AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8499DE27-46AE-4A46-9DB2-D9FD6EF854AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF9445B9-D957-405A-A8CD-1CDF28F58671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF9445B9-D957-405A-A8CD-1CDF28F58671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF9445B9-D957-405A-A8CD-1CDF28F58671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF9445B9-D957-405A-A8CD-1CDF28F58671}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
